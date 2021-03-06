@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<cdi>
+  <container>
+    <module class="org.openurp.std.transfer.service.DefaultModule"/>
+  </container>
+  <container name="web">
+    <module class="org.openurp.std.transfer.web.action.admin.DefaultModule"/>
+    <module class="org.openurp.std.transfer.web.action.student.DefaultModule"/>
+    <module class="org.openurp.boot.edu.web.action.ProjectModule" />
+  </container>
+</cdi>
