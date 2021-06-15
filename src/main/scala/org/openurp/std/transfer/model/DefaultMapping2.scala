@@ -20,7 +20,7 @@ package org.openurp.std.transfer.model
 
 import org.beangle.data.orm.MappingModule
 
-class DefaultMapping extends MappingModule {
+class DefaultMapping2 extends MappingModule {
 
   def binding(): Unit = {
     bind[StdTransferApplyLog]

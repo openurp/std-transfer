@@ -6,6 +6,6 @@
   <container name="web">
     <module class="org.openurp.std.transfer.web.action.admin.DefaultModule"/>
     <module class="org.openurp.std.transfer.web.action.student.DefaultModule"/>
-    <module class="org.openurp.boot.edu.web.action.ProjectModule" />
+    <module class="org.openurp.starter.edu.action.ProjectModule" />
   </container>
 </cdi>

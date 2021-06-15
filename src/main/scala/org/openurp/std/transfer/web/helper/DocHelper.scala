@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.std.transfer.web.action
+package org.openurp.std.transfer.web.helper
 
 import java.io.ByteArrayOutputStream
 import java.net.URL
@@ -58,7 +58,7 @@ object DocHelper {
     data.put("majorGpa", nf.format(apply.majorGpa))
     data.put("otherGpa", nf.format(apply.otherGpa))
 
-    val url = this.getClass.getResource("/org/openurp/edu/student/transfer/application.docx")
+    val url = this.getClass.getResource("/org/openurp/std/transfer/application.docx")
     DocHelper.toDoc(url, data)
   }
 

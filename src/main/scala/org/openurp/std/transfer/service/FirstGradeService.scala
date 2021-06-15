@@ -20,7 +20,6 @@ package org.openurp.std.transfer.service
 
 import org.openurp.std.transfer.model.TransferApply
 
-
 trait FirstGradeService {
 
   def stat(apply: TransferApply): FirstGradeStat

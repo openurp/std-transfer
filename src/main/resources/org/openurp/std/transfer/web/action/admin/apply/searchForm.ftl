@@ -7,4 +7,3 @@
 [@b.textfield name="transferApply.fromMajor.name" label="转出专业"/]
 [@b.select name="transferApply.toDepart.id" label="转入院系" items=departs empty="..."/]
 [@b.textfield name="transferApply.toMajor.name" label="转入专业"/]
-

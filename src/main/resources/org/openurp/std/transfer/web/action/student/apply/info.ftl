@@ -28,6 +28,6 @@
     </tr>
     <tr>
       <td class="title">转入理由：</td>
-      <td>${apply.reason!}</td>
+      <td colspan="5">${apply.reason!}</td>
     </tr>
   </table>

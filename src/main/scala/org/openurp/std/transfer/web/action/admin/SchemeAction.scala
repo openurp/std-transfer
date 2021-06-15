@@ -27,7 +27,7 @@ import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
 import org.openurp.base.edu.model.{Direction, Major}
 import org.openurp.base.model.Department
-import org.openurp.boot.edu.helper.ProjectSupport
+import org.openurp.starter.edu.helper.ProjectSupport
 import org.openurp.std.transfer.model.{TransferApply, TransferOption, TransferScheme}
 
 class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {

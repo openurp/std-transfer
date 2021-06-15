@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.4.8</version>
+    <version>0.4.14</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.openurp.std.transfer</groupId>
@@ -13,9 +13,10 @@
   <name>OpenURP Std Transfer</name>
 
   <properties>
-    <openurp.api.version>0.20.4</openurp.api.version>
-    <openurp.boot.version>0.0.2</openurp.boot.version>
-    <poi.version>4.1.0</poi.version>
+    <openurp.api.version>0.23.0</openurp.api.version>
+    <openurp.starter.version>0.0.7</openurp.starter.version>
+    <openurp.base.version>0.1.18</openurp.base.version>
+    <poi.version>4.1.2</poi.version>
   </properties>
 
   <dependencies>
@@ -35,9 +36,14 @@
       <version>${openurp.api.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.openurp.boot</groupId>
-      <artifactId>openurp-boot-web</artifactId>
-      <version>${openurp.boot.version}</version>
+      <groupId>org.openurp.starter</groupId>
+      <artifactId>openurp-starter-web</artifactId>
+      <version>${openurp.starter.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openurp.base</groupId>
+      <artifactId>openurp-base-tag</artifactId>
+      <version>${openurp.base.version}</version>
     </dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>

@@ -23,10 +23,10 @@ import org.beangle.data.transfer.exporter.ExportSetting
 import org.beangle.webmvc.api.annotation.{mapping, param}
 import org.beangle.webmvc.api.view.View
 import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.boot.edu.helper.ProjectSupport
+import org.openurp.starter.edu.helper.ProjectSupport
 import org.openurp.std.transfer.model.StdTransferApplyLog
 import org.openurp.std.transfer.service.FirstGradeService
-import org.openurp.std.transfer.web.action.DocHelper
+import org.openurp.std.transfer.web.helper.DocHelper
 import org.openurp.std.transfer.web.helper.ApplyPropertyExtractor
 import org.openurp.std.transfer.model.{TransferApply, TransferScheme}
 
