@@ -31,7 +31,7 @@
       [@b.col title="服从调剂" width="9%" property="adjustable"]
         ${transferApply.adjustable?string('是','否')}
       [/@]
-      [@b.col title="状态" width="10%" property="state"/]
+      [@b.col title="状态" width="10%" property="auditState"/]
     [/@]
   [/@]
 [@b.foot/]
