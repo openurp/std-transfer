@@ -1,39 +1,39 @@
 /*
- * OpenURP, Agile University Resource Planning Solution.
- *
- * Copyright © 2014, The OpenURP Software.
+ * Copyright (C) 2014, The OpenURP Software.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful.
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.openurp.std.transfer.web.action.student
 
-import java.time.Instant
-
 import org.beangle.commons.collection.Collections
-import org.beangle.commons.web.util.RequestUtils
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.security.Securities
-import org.beangle.webmvc.api.annotation.{ignore, mapping, param}
-import org.beangle.webmvc.api.view.{Status, View}
-import org.beangle.webmvc.entity.action.RestfulAction
-import org.openurp.base.edu.AuditStates
-import org.openurp.base.edu.model.{Project, Student}
+import org.beangle.web.action.annotation.{ignore, mapping, param}
+import org.beangle.web.action.view.{Status, View}
+import org.beangle.web.servlet.util.RequestUtils
+import org.beangle.webmvc.support.action.RestfulAction
+import org.openurp.base.model.{AuditStatus, Project}
+import org.openurp.base.std.model.Student
 import org.openurp.starter.edu.helper.ProjectSupport
-import org.openurp.std.transfer.model.StdTransferApplyLog
+import org.openurp.std.transfer.config.{TransferOption, TransferScheme}
+import org.openurp.std.transfer.log.TransferApplyLog
+import org.openurp.std.transfer.model.TransferApply
 import org.openurp.std.transfer.service.FirstGradeService
 import org.openurp.std.transfer.web.helper.DocHelper
-import org.openurp.std.transfer.model.{TransferApply, TransferOption, TransferScheme}
+
+import java.time.Instant
 
 class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
 
@@ -99,11 +99,11 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
   override protected def removeAndRedirect(entities: Seq[TransferApply]): View = {
     val std = getStudent(getProject)
     val my = entities.filter(x => x.std == std)
-    val logs = Collections.newBuffer[StdTransferApplyLog]
+    val logs = Collections.newBuffer[TransferApplyLog]
     var outdated = false
     my foreach { a =>
       val log = makeLog(a)
-      log.action = "删除"
+      log.operation = "删除"
       logs += log
       if (!a.option.scheme.canApply()) {
         outdated = true
@@ -140,7 +140,7 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
     apply.toDirection = option.direction
 
     apply.updatedAt = Instant.now
-    apply.auditState = AuditStates.Submited
+    apply.status = AuditStatus.Submited
 
     val gpaStat = firstGradeService.stat(apply)
     apply.gpa = gpaStat.gpa
@@ -152,14 +152,14 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
     redirect("index", "info.save.success")
   }
 
-  private def makeLog(apply: TransferApply): StdTransferApplyLog = {
-    val log = new StdTransferApplyLog
+  private def makeLog(apply: TransferApply): TransferApplyLog = {
+    val log = new TransferApplyLog
     log.std = apply.std
-    log.action = if (apply.persisted) "修改" else "新增"
+    log.operation = if (apply.persisted) "修改" else "新增"
     val option = entityDao.get(classOf[TransferOption], apply.option.id)
-    log.content = option.depart.name + " " + option.major.name + " " + option.direction.map(_.name).getOrElse("")
+    log.contents = option.depart.name + " " + option.major.name + " " + option.direction.map(_.name).getOrElse("")
     log.ip = RequestUtils.getIpAddr(request)
-    log.logAt = Instant.now
+    log.operateAt = Instant.now
     log
   }
 

@@ -1,28 +1,26 @@
 /*
- * OpenURP, Agile University Resource Planning Solution.
- *
- * Copyright © 2014, The OpenURP Software.
+ * Copyright (C) 2014, The OpenURP Software.
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful.
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.openurp.std.transfer.service
 
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.openurp.base.edu.model.Course
 import org.openurp.code.edu.model.GradeType
-import org.openurp.edu.grade.course.model.CourseGrade
-import org.openurp.edu.grade.model.Grade
+import org.openurp.edu.grade.model.{CourseGrade, Grade}
 import org.openurp.edu.program.domain.AlternativeCourseProvider
 import org.openurp.edu.program.model.AlternativeCourse
 import org.openurp.std.transfer.model.TransferApply
@@ -54,9 +52,9 @@ class DefaultFirstGradeService extends FirstGradeService {
       }
     }
 
-    import org.openurp.edu.grade.course.domain.GradeFilters._
+    import org.openurp.edu.grade.domain.GradeFilters.*
     // 过滤缓考成绩
-    val leftGrades = chain(NotExemption,Stable).filter(courseGrades)
+    val leftGrades = chain(NotExemption, Stable).filter(courseGrades)
 
     var allGp: Float = 0
     var allCredit: Float = 0
@@ -75,9 +73,9 @@ class DefaultFirstGradeService extends FirstGradeService {
             g.getGaGrade(new GradeType(GradeType.EndGa)) match {
               case Some(eg) => eg.gp.getOrElse(0f)
               case None =>
-                if(g.getExamGrade(new GradeType(GradeType.Makeup)).nonEmpty){
+                if (g.getExamGrade(new GradeType(GradeType.Makeup)).nonEmpty) {
                   0f
-                }else{
+                } else {
                   g.gp.getOrElse(0f)
                 }
             }
