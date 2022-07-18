@@ -10,7 +10,7 @@
         bg.form.addInput(form, "keys", "std.user.code,std.user.name,std.person.gender.name,fromGrade,fromDepart.name,fromMajor.name,fromDirection.name,fromSquad.name,toGrade,toDepart.name,toMajor.name,toDirection.name,toSquad.name,gpa,majorGpa,otherGpa,mobile,adjustable,state");
         bg.form.addInput(form, "titles", "学号,姓名,性别,转出年级,转出院系,转出专业,转出方向,转出班级,转入年级,转入院系,转入专业,转入方向,转入班级,总绩点,专业课成绩绩点,专业课外成绩绩点,联系电话,是否服从调剂,状态");
         bg.form.addInput(form, "fileName", "学生转专业申请名单");
-        bg.form.submit(form, "${b.url('!export')}","_self");
+        bg.form.submit(form, "${b.url('!exportData')}","_self");
       }
     [/@]
     [@b.row]
@@ -31,7 +31,7 @@
       [@b.col title="服从调剂" width="9%" property="adjustable"]
         ${transferApply.adjustable?string('是','否')}
       [/@]
-      [@b.col title="状态" width="10%" property="auditState"/]
+      [@b.col title="状态" width="10%" property="status"/]
     [/@]
   [/@]
 [@b.foot/]

@@ -47,7 +47,7 @@
         bg.form.addInput(form,"fileName","转专业期号详细信息导出");
         bg.form.addInput(form,"template","template/excel/transferSchemeInfoExport.xls");
         bg.form.addInput(form,"transferScheme.id",id);
-        bg.form.submit(form,"transferScheme!export.action","_self");
+        bg.form.submit(form,"transferScheme!exportData.action","_self");
       }
 
       function stat(){
