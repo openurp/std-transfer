@@ -23,9 +23,9 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Std Transfer"
 ThisBuild / homepage := Some(url("http://openurp.github.io/std-transfer/index.html"))
 
-val apiVer = "0.26.0"
-val starterVer = "0.0.21"
-val baseVer = "0.1.30"
+val apiVer = "0.31.1"
+val starterVer = "0.2.13"
+val baseVer = "0.3.6"
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVer
 val openurp_std_api = "org.openurp.std" % "openurp-std-api" % apiVer
 val openurp_edu_api = "org.openurp.edu" % "openurp-edu-api" % apiVer

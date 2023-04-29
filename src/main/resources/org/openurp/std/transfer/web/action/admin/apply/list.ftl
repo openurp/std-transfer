@@ -25,13 +25,22 @@
       [@b.col title="转出专业" width="15%" property="fromMajor.name"]
       <span style="font-size:0.8em">${(transferApply.fromMajor.name)!}</span>
       [/@]
-      [@b.col title="申请转入" property="option.major.name" width="30%"]
+      [@b.col title="申请转入" property="option.major.name" width="15%"]
         ${transferApply.option.major.name} ${(transferApply.option.direction.name)!}
       [/@]
-      [@b.col title="服从调剂" width="9%" property="adjustable"]
+      [@b.col title="服从调剂" width="5%" property="adjustable"]
         ${transferApply.adjustable?string('是','否')}
       [/@]
-      [@b.col title="状态" width="10%" property="status"/]
+      [@b.col title="平均绩点" property="gpa" width="5%"]
+        ${transferApply.gpa?string("#.00")}
+      [/@]
+      [@b.col title="专业课绩点" property="gpa" width="8%"]
+        ${transferApply.majorGpa?string("#.00000")}
+      [/@]
+      [@b.col title="专业课外绩点" property="gpa" width="8%"]
+        ${transferApply.otherGpa?string("#.00000")}
+      [/@]
+      [@b.col title="状态" width="7%" property="status"/]
     [/@]
   [/@]
 [@b.foot/]
