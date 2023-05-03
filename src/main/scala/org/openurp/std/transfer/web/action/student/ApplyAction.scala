@@ -24,14 +24,14 @@ import org.beangle.web.action.annotation.{ignore, mapping, param}
 import org.beangle.web.action.view.{Status, View}
 import org.beangle.web.servlet.util.RequestUtils
 import org.beangle.webmvc.support.action.RestfulAction
-import org.openurp.base.model.{AuditStatus, Project}
+import org.openurp.base.model.{AuditStatus, Project, User}
 import org.openurp.base.std.model.Student
-import org.openurp.starter.edu.helper.ProjectSupport
+import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.transfer.config.{TransferOption, TransferScheme}
 import org.openurp.std.transfer.log.TransferApplyLog
 import org.openurp.std.transfer.model.TransferApply
 import org.openurp.std.transfer.service.FirstGradeService
-import org.openurp.std.transfer.web.helper.DocHelper
+import org.openurp.std.transfer.web.helper.ApplyDocHelper
 
 import java.time.Instant
 
@@ -61,17 +61,17 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
 
   @mapping(value = "new", view = "new,form")
   override def editNew(): View = {
-    val scheme = entityDao.get(classOf[TransferScheme], longId("scheme"))
+    val scheme = entityDao.get(classOf[TransferScheme], getLongId("scheme"))
     if (!scheme.canApply()) {
       redirect("index", "不在操作时间内")
     }
 
-    var entity = getEntity(entityType, simpleEntityName)
+    var entity = getEntity(classOf[TransferApply], simpleEntityName)
     //如果没有给id,也需要查一查
     if (!entity.persisted) {
       val applyQuery = OqlBuilder.from(classOf[TransferApply], "apply")
       applyQuery.where("apply.option.scheme=:scheme", scheme)
-      applyQuery.where("apply.std.user.code=:me", Securities.user)
+      applyQuery.where("apply.std.code=:me", Securities.user)
       entityDao.search(applyQuery) foreach { e =>
         entity = e
       }
@@ -83,11 +83,14 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
 
   override def editSetting(apply: TransferApply): Unit = {
     val std = getStudent(getProject)
-    val scheme = entityDao.get(classOf[TransferScheme], longId("scheme"))
+    val scheme = entityDao.get(classOf[TransferScheme], getLongId("scheme"))
     if (!apply.persisted) {
-      apply.toGrade = Some(std.state.get.grade)
-      apply.mobile = std.user.mobile.orNull
-      apply.email = std.user.email.orNull
+      apply.toGrade = scheme.grade
+      val user = entityDao.findBy(classOf[User], "code" -> std.code, "school" -> std.project.school).headOption
+      user foreach { u =>
+        apply.mobile = u.mobile.orNull
+        apply.email = u.email.orNull
+      }
     }
     put("std", std)
     put("scheme", scheme)
@@ -119,7 +122,7 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
   }
 
   override def saveAndRedirect(apply: TransferApply): View = {
-    val scheme = entityDao.get(classOf[TransferScheme], longId("scheme"))
+    val scheme = entityDao.get(classOf[TransferScheme], getLongId("scheme"))
 
     if (!scheme.canApply()) {
       redirect("index", "不在操作时间内")
@@ -138,6 +141,7 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
     apply.toDepart = option.depart
     apply.toMajor = option.major
     apply.toDirection = option.direction
+    apply.toGrade = scheme.grade
 
     apply.updatedAt = Instant.now
     apply.status = AuditStatus.Submited
@@ -146,6 +150,7 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
     apply.gpa = gpaStat.gpa
     apply.majorGpa = gpaStat.majorGpa
     apply.otherGpa = gpaStat.otherGpa
+    apply.transferGpa = gpaStat.transferGpa
 
     val log = makeLog(apply)
     saveOrUpdate(List(apply, log))
@@ -168,8 +173,8 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
     val apply = entityDao.get(classOf[TransferApply], id.toLong)
     val std = getStudent(getProject)
     if (std == apply.std) {
-      val bytes = DocHelper.toDoc(apply)
-      val filename = new String(std.user.code.getBytes, "ISO8859-1")
+      val bytes = ApplyDocHelper.toDoc(apply)
+      val filename = new String(std.code.getBytes, "ISO8859-1")
       response.setHeader("Content-disposition", "attachment; filename=" + filename + ".docx")
       response.setHeader("Content-Length", bytes.length.toString)
       val out = response.getOutputStream
@@ -184,7 +189,7 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
 
   def getStudent(project: Project): Student = {
     val builder = OqlBuilder.from(classOf[Student], "s")
-      .where("s.user.code=:code", Securities.user)
+      .where("s.code=:code", Securities.user)
       .where("s.project=:project", project)
     val stds = entityDao.search(builder)
     if (stds.isEmpty) {

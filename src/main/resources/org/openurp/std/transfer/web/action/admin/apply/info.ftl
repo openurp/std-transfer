@@ -1,5 +1,5 @@
 [#ftl/]
-[@b.toolbar title="${transferApply.std.user.name}转专业信息"]
+[@b.toolbar title="${transferApply.std.name}转专业信息"]
    bar.addBack();
 [/@]
 <table class="infoTable">
@@ -7,14 +7,14 @@
       <td class="title" width="10%">学年学期：</td>
       <td width="23%">${transferApply.option.scheme.semester.schoolYear} 学年度 ${transferApply.option.scheme.semester.name}学期</td>
       <td class="title" width="10%">学号姓名：</td>
-      <td width="23%">${transferApply.std.user.code} ${transferApply.std.user.name}</td>
+      <td width="23%">${transferApply.std.code} ${transferApply.std.name}</td>
       <td class="title" width="12%">更新时间</td>
       <td>${transferApply.updatedAt?string("yyyy-MM-dd HH:mm:ss")}</td>
     </tr>
     <tr>
       <td class="title">原专业：</td>
       <td colspan="5">
-       ${transferApply.fromGrade}级 ${transferApply.fromDepart.name} ${transferApply.fromMajor.name} ${(transferApply.fromDirection.name)!} ${(transferApply.fromSquad.name)!}
+       ${transferApply.fromGrade.code}级 ${transferApply.fromDepart.name} ${transferApply.fromMajor.name} ${(transferApply.fromDirection.name)!} ${(transferApply.fromSquad.name)!}
       </td>
     </tr>
     <tr>
@@ -54,14 +54,12 @@
       <td>${transferApply.otherGpa?string("#.00000")}</td>
     </tr>
     <tr>
+      <td class="title">转专业绩点：</td>
+      <td>${transferApply.transferGpa?string("#.00000")}</td>
       <td class="title">状态：</td>
-      <td>
-        ${transferApply.auditState!}
-      </td>
+      <td>${transferApply.auditState!}</td>
       <td class="title">申请表：</td>
-      <td colspan="3">
-        [@b.a href="!download?id="+ transferApply.id target="_blank"]下载[/@]
-      </td>
+      <td>[@b.a href="!download?id="+ transferApply.id target="_blank"]下载[/@]</td>
     </tr>
   </table>
 

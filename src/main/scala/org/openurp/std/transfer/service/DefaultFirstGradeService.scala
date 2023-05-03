@@ -34,6 +34,7 @@ class DefaultFirstGradeService extends FirstGradeService {
 
   def stat(apply: TransferApply): FirstGradeStat = {
     val std = apply.std
+    val level = std.level
     val query = OqlBuilder.from(classOf[CourseGrade], "cg")
     query.where("cg.std=:std", std)
     query.where("cg.status=:status", Grade.Status.Published)
@@ -80,21 +81,22 @@ class DefaultFirstGradeService extends FirstGradeService {
                 }
             }
         }
-      allGp += gaGp * g.course.credits
-      allCredit += g.course.credits
+      val credits = g.course.getCredits(level)
+      allGp += gaGp * credits
+      allCredit += credits
       if (g.courseType.major) {
-        majorGp += gaGp * g.course.credits
-        majorCredit += g.course.credits
+        majorGp += credits
+        majorCredit += credits
       } else {
-        otherGp += gaGp * g.course.credits
-        otherCredit += g.course.credits
+        otherGp += gaGp * credits
+        otherCredit += credits
       }
     }
 
     val allGpa = if (allCredit != 0) allGp / allCredit else 0
     val majorGpa = if (majorCredit != 0) majorGp / majorCredit else 0
     val otherGpa = if (otherCredit != 0) otherGp / otherCredit else 0
-    FirstGradeStat(allGpa, majorGpa, otherGpa)
+    FirstGradeStat(allGpa, majorGpa, otherGpa, majorGpa * 0.3f + otherGpa * 0.7f)
   }
 
   protected def removeSubstitutes(gradeCourses: collection.Set[Course], substitute: AlternativeCourse, cgs: mutable.Buffer[CourseGrade]): Unit = {

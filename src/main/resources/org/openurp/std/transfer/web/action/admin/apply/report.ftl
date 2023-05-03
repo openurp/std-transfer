@@ -34,11 +34,11 @@
     </tr>
     <tr class="infoRow">
       <td>姓名</td>
-      <td>${std.user.name}</td>
+      <td>${std.name}</td>
       <td>性别</td>
       <td>${std.person.gender.name}</td>
       <td>学号</td>
-      <td colspan="2">${std.user.code}</td>
+      <td colspan="2">${std.code}</td>
       <td>班级</td>
       <td>
       [#if ((apply.fromSquad.name)!"")?length > 6]

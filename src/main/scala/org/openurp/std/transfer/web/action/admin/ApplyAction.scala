@@ -18,18 +18,18 @@
 package org.openurp.std.transfer.web.action.admin
 
 import org.beangle.data.dao.OqlBuilder
-import org.beangle.data.transfer.exporter.ExportSetting
+import org.beangle.data.transfer.exporter.ExportContext
 import org.beangle.web.action.annotation.{mapping, param}
 import org.beangle.web.action.view.View
-import org.beangle.webmvc.support.action.RestfulAction
-import org.openurp.starter.edu.helper.ProjectSupport
+import org.beangle.webmvc.support.action.{ExportSupport, RestfulAction}
+import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.transfer.config.TransferScheme
 import org.openurp.std.transfer.log.TransferApplyLog
 import org.openurp.std.transfer.model.TransferApply
 import org.openurp.std.transfer.service.FirstGradeService
-import org.openurp.std.transfer.web.helper.{ApplyPropertyExtractor, DocHelper}
+import org.openurp.std.transfer.web.helper.{ApplyPropertyExtractor, ApplyDocHelper}
 
-class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
+class ApplyAction extends RestfulAction[TransferApply], ExportSupport[TransferApply], ProjectSupport {
   var firstGradeService: FirstGradeService = _
 
   override def indexSetting(): Unit = {
@@ -44,7 +44,7 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
 
   @mapping(value = "{id}")
   override def info(id: String): View = {
-    val apply = getModel[TransferApply](entityName, convertId(id))
+    val apply = entityDao.get(classOf[TransferApply], id.toLong)
     put("transferApply", apply)
     put("logs", entityDao.findBy(classOf[TransferApplyLog], "std", List(apply.std)))
     forward()
@@ -53,8 +53,8 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
   @mapping("download/{id}")
   def download(@param("id") id: String): View = {
     val apply = entityDao.get(classOf[TransferApply], id.toLong)
-    val bytes = DocHelper.toDoc(apply)
-    val filename = new String(apply.std.user.code.getBytes, "ISO8859-1")
+    val bytes = ApplyDocHelper.toDoc(apply)
+    val filename = new String(apply.std.code.getBytes, "ISO8859-1")
     response.setHeader("Content-disposition", "attachment; filename=" + filename + ".docx")
     response.setHeader("Content-Length", bytes.length.toString)
     val out = response.getOutputStream
@@ -66,28 +66,29 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
 
   def report(): View = {
     val query = OqlBuilder.from(classOf[TransferApply], "apply")
-    query.where("apply.id in(:applies)", longIds("transferApply"))
-    query.orderBy("apply.std.user.code")
+    query.where("apply.id in(:applies)", getLongIds("transferApply"))
+    query.orderBy("apply.std.code")
     val applies = entityDao.search(query)
     put("applies", applies)
     forward()
   }
 
   def recalcGpa(): View = {
-    val ids = longIds("transferApply")
+    val ids = getLongIds("transferApply")
     val applies = entityDao.find(classOf[TransferApply], ids)
     applies foreach { apply =>
       val gpaStat = firstGradeService.stat(apply)
       apply.gpa = gpaStat.gpa
       apply.majorGpa = gpaStat.majorGpa
       apply.otherGpa = gpaStat.otherGpa
+      apply.transferGpa = gpaStat.transferGpa
     }
     entityDao.saveOrUpdate(applies)
     redirect("search", "info.save.success")
   }
 
-  override def configExport(setting: ExportSetting): Unit = {
-    super.configExport(setting)
-    setting.context.extractor = new ApplyPropertyExtractor
+  override def configExport(context: ExportContext): Unit = {
+    context.extractor = new ApplyPropertyExtractor
+    super.configExport(context)
   }
 }

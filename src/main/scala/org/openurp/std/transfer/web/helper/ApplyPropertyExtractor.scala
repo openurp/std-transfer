@@ -17,10 +17,10 @@
 
 package org.openurp.std.transfer.web.helper
 
-import java.text.NumberFormat
-
 import org.beangle.data.transfer.exporter.DefaultPropertyExtractor
 import org.openurp.std.transfer.model.TransferApply
+
+import java.text.NumberFormat
 
 class ApplyPropertyExtractor extends DefaultPropertyExtractor {
 
@@ -35,6 +35,7 @@ class ApplyPropertyExtractor extends DefaultPropertyExtractor {
       case "majorGpa" =>
         majorGpaFormater.format(target.asInstanceOf[TransferApply].majorGpa)
       case "otherGpa" => majorGpaFormater.format(target.asInstanceOf[TransferApply].otherGpa)
+      case "transferGpa" => majorGpaFormater.format(target.asInstanceOf[TransferApply].transferGpa)
       case _ => super.getPropertyValue(target, property)
     }
   }

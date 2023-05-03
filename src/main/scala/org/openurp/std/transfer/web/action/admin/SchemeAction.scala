@@ -23,8 +23,8 @@ import org.beangle.data.dao.OqlBuilder
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
 import org.openurp.base.edu.model.{Direction, Major}
-import org.openurp.base.model.Department
-import org.openurp.starter.edu.helper.ProjectSupport
+import org.openurp.base.model.{Department, Project}
+import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.transfer.config.{TransferOption, TransferScheme}
 import org.openurp.std.transfer.model.TransferApply
 
@@ -32,7 +32,9 @@ import java.time.ZoneId
 
 class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
   override def indexSetting(): Unit = {
-    val semester = getCurrentSemester
+    given project: Project = getProject
+
+    val semester = getSemester
     val schemes = entityDao.findBy(classOf[TransferScheme], "semester", List(semester))
     schemes foreach { scheme =>
       val applyQuery = OqlBuilder.from[Any](classOf[TransferApply].getName, "a")
@@ -54,13 +56,15 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
   }
 
   override def editSetting(scheme: TransferScheme): Unit = {
+    given project: Project = getProject
+
     if (null == scheme.semester) {
-      scheme.semester = getCurrentSemester
+      scheme.semester = getSemester
     }
   }
 
-  def addOptions: View = {
-    val scheme = entityDao.get(classOf[TransferScheme], longId("transferScheme"))
+  def addOptions(): View = {
+    val scheme = entityDao.get(classOf[TransferScheme], getLongId("transferScheme"))
     val project = getProject
     val majors = entityDao.findBy(classOf[Major], "project", List(project))
     val options = Collections.newBuffer[TransferOption]
@@ -111,15 +115,15 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
     forward("editOptions")
   }
 
-  def editOptions: View = {
-    val scheme = entityDao.get(classOf[TransferScheme], longId("transferScheme"))
+  def editOptions(): View = {
+    val scheme = entityDao.get(classOf[TransferScheme], getLongId("transferScheme"))
     put("options", scheme.options)
     put("scheme", scheme)
     forward("editOptions")
   }
 
-  def saveOptions: View = {
-    val scheme = entityDao.get(classOf[TransferScheme], longId("transferScheme"))
+  def saveOptions(): View = {
+    val scheme = entityDao.get(classOf[TransferScheme], getLongId("transferScheme"))
     val count = getInt("optionCount", 0)
     (1 to count) foreach {
       idx =>
@@ -160,9 +164,11 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
   }
 
   override def saveAndRedirect(entity: TransferScheme): View = {
-    entity.project = getProject
+    given project: Project = getProject
+
+    entity.project = project
     if (null == entity.semester) {
-      entity.semester = getCurrentSemester
+      entity.semester = getSemester
     }
     saveOrUpdate(entity)
     redirect("index", "info.save.success")

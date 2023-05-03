@@ -6,7 +6,7 @@
       <td class="title" width="10%">学年学期：</td>
       <td width="23%">${scheme.semester.schoolYear} 学年度 ${scheme.semester.name}学期</td>
       <td class="title" width="10%">学号姓名：</td>
-      <td width="23%">${apply.std.user.code} ${apply.std.user.name}</td>
+      <td width="23%">${apply.std.code} ${apply.std.name}</td>
       <td class="title" width="10%">是否服从调剂</td>
       <td>${(apply.adjustable)?string("是","否")}</td>
     </tr>
