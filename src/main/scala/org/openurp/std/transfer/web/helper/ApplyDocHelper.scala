@@ -57,6 +57,7 @@ object ApplyDocHelper {
     nf.setMaximumFractionDigits(5)
     data.put("majorGpa", nf.format(apply.majorGpa))
     data.put("otherGpa", nf.format(apply.otherGpa))
+    data.put("transferGpa", nf.format(apply.transferGpa))
 
     val url = this.getClass.getResource("/org/openurp/std/transfer/application.docx")
     DocHelper.toDoc(url, data)
