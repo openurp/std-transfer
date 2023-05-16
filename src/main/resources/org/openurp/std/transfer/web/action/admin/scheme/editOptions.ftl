@@ -5,6 +5,7 @@
    }
 [/@]
 [@b.form name="schemeOptionEditForm" action="!saveOptions"]
+
   [@b.grid items=options sortable="false" var="option" ]
       [@b.row]
           [@b.col title="序号" width="5%"]${option_index+1}[/@]

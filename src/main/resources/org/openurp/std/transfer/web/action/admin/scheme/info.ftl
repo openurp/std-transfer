@@ -26,8 +26,16 @@
       <td>[#assign total=0][#list scheme.options as o][#assign total=total+o.currentCount][/#list]${total}</td>
     </tr>
   </table>
-
-  [@b.grid items=scheme.options?sort_by(["major","code"]) sortable="false" var="option" ]
+  [#assign optionMap={}/]
+  [#list scheme.options as o]
+    [#assign option_key]${o.depart.code}_${o.major.code}_${(o.direction.code)!}[/#assign]
+    [#assign optionMap={option_key:o}+optionMap/]
+  [/#list]
+  [#assign options=[]/]
+  [#list optionMap?keys?sort as ok]
+    [#assign options=options + [optionMap[ok]]/]
+  [/#list]
+  [@b.grid items=options sortable="false" var="option" ]
       [@b.row]
           [@b.col title="序号" width="5%"]${option_index+1}[/@]
           [@b.col property="depart.name" title="院系" width="25%"/]

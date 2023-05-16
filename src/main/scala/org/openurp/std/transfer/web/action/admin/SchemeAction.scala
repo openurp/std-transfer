@@ -24,7 +24,7 @@ import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
 import org.openurp.base.edu.model.{Direction, Major}
 import org.openurp.base.model.{Department, Project}
-import org.openurp.base.std.model.Grade
+import org.openurp.base.std.model.{Grade, StudentState}
 import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.transfer.config.{TransferOption, TransferScheme}
 import org.openurp.std.transfer.model.TransferApply
@@ -67,22 +67,19 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
   def addOptions(): View = {
     val scheme = entityDao.get(classOf[TransferScheme], getLongId("transferScheme"))
     val project = getProject
-    val majors = entityDao.findBy(classOf[Major], "project", List(project))
+    val query = OqlBuilder.from(classOf[Major], "m")
+    query.where("m.project=:project", project)
+    query.where(s"exists(from ${classOf[StudentState].getName} ss where ss.major=m and ss.grade=:grade)", scheme.grade)
+    val majors = entityDao.search(query)
     val options = Collections.newBuffer[TransferOption]
     val now = scheme.applyBeginAt.atZone(ZoneId.systemDefault()).toLocalDate
     majors foreach { m =>
       if (m.within(now) && !m.code.startsWith("FX")) {
-        var findDirection = false
         m.directions foreach { d =>
           val departs = Collections.newBuffer[Department]
           if (d.within(now)) {
-            d.journals foreach { dj =>
-              if (dj.within(now)) {
-                departs += dj.depart
-              }
-            }
+            d.journals foreach { dj => if dj.within(now) then departs += dj.depart }
           }
-          findDirection = departs.nonEmpty
           departs foreach { depart =>
             val existed = scheme.options.exists(x => x.depart == depart && x.major == m && x.direction == Some(d))
             if (!existed) {
@@ -94,11 +91,12 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
             }
           }
         }
-        if (!findDirection) {
-          m.journals foreach { mj =>
-            if (mj.within(now)) {
-              val existed = scheme.options.exists(x => x.depart == mj.depart && x.major == m && x.direction.isEmpty)
-              if (!existed) {
+        m.journals foreach { mj =>
+          if (mj.within(now)) {
+            val existed = scheme.options.exists(x => x.depart == mj.depart && x.major == m && x.direction.isEmpty)
+            if (!existed) {
+              val added = options.exists(x => x.depart == mj.depart && x.major == m && x.direction.isEmpty)
+              if (!added) {
                 val option = new TransferOption
                 option.depart = mj.depart
                 option.major = m
@@ -111,7 +109,7 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
     }
 
     put("scheme", scheme)
-    val sorted = options.sortBy(x => x.depart.code + x.major.code)
+    val sorted = options.sortBy(x => x.depart.code + x.major.code + x.direction.map(_.code).getOrElse(""))
     put("options", sorted)
     forward("editOptions")
   }
