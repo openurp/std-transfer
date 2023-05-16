@@ -24,6 +24,7 @@ import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
 import org.openurp.base.edu.model.{Direction, Major}
 import org.openurp.base.model.{Department, Project}
+import org.openurp.base.std.model.Grade
 import org.openurp.starter.web.support.ProjectSupport
 import org.openurp.std.transfer.config.{TransferOption, TransferScheme}
 import org.openurp.std.transfer.model.TransferApply
@@ -42,6 +43,7 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
       applyQuery.select("a.option.id,count(*)").groupBy("a.option.id")
       val rs = entityDao.search(applyQuery)
       val optionsMap = scheme.options.groupBy(_.id)
+      scheme.options foreach (_.currentCount = 0) //reset all
       rs foreach { d =>
         val data = d.asInstanceOf[Array[AnyRef]]
         optionsMap.get(data(0).asInstanceOf[Number].longValue()) foreach { option =>
@@ -51,16 +53,15 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
       entityDao.saveOrUpdate(scheme)
     }
     put("schemes", schemes)
-    put("project", getProject)
+    put("project", project)
     put("semester", semester)
   }
 
   override def editSetting(scheme: TransferScheme): Unit = {
     given project: Project = getProject
 
-    if (null == scheme.semester) {
-      scheme.semester = getSemester
-    }
+    if (null == scheme.semester) scheme.semester = getSemester
+    put("grades", entityDao.findBy(classOf[Grade], "project", project))
   }
 
   def addOptions(): View = {

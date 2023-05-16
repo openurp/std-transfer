@@ -125,7 +125,7 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
     val scheme = entityDao.get(classOf[TransferScheme], getLongId("scheme"))
 
     if (!scheme.canApply()) {
-      redirect("index", "不在操作时间内")
+      return redirect("index", "不在操作时间内")
     }
     val std = getStudent(getProject)
     apply.std = std

@@ -57,7 +57,7 @@
       <td class="title">转专业绩点：</td>
       <td>${transferApply.transferGpa?string("#.00000")}</td>
       <td class="title">状态：</td>
-      <td>${transferApply.auditState!}</td>
+      <td>${transferApply.status!} ${transferApply.updatedAt?string("yyyy-MM-dd HH:mm")}</td>
       <td class="title">申请表：</td>
       <td>[@b.a href="!download?id="+ transferApply.id target="_blank"]下载[/@]</td>
     </tr>

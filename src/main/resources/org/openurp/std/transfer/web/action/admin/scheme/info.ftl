@@ -7,7 +7,7 @@
       <td class="title" width="10%">名称：</td>
       <td width="23%">${scheme.name}</td>
       <td class="title" width="10%">是否发布</td>
-      <td>${(scheme.published!false)?string("是","否")}</td>
+      <td style="color:${scheme.published?string('green','red')}">${(scheme.published!false)?string("是","否")}</td>
     </tr>
     <tr>
       <td class="title">院系制定计划：</td>
