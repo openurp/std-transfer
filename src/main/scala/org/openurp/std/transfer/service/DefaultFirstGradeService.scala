@@ -69,19 +69,8 @@ class DefaultFirstGradeService extends FirstGradeService {
 
     for (g <- leftGrades) {
       val gaGp: Float =
-        g.getGaGrade(new GradeType(GradeType.DelayGa)) match {
-          case Some(dg) => dg.gp.getOrElse(0f)
-          case None =>
-            g.getGaGrade(new GradeType(GradeType.EndGa)) match {
-              case Some(eg) => eg.gp.getOrElse(0f)
-              case None =>
-                if (g.getExamGrade(new GradeType(GradeType.Makeup)).nonEmpty) {
-                  0f
-                } else {
-                  g.gp.getOrElse(0f)
-                }
-            }
-        }
+        if g.getExamGrade(new GradeType(GradeType.Makeup)).nonEmpty then 0f
+        else g.gp.getOrElse(0f)
 
       val credits = g.course.getCredits(level)
       allGp += gaGp * credits
