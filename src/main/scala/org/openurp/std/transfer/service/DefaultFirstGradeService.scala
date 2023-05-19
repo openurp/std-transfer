@@ -38,6 +38,7 @@ class DefaultFirstGradeService extends FirstGradeService {
     val query = OqlBuilder.from(classOf[CourseGrade], "cg")
     query.where("cg.std=:std", std)
     query.where("cg.status=:status", Grade.Status.Published)
+    //cannot be <=
     query.where("cg.semester.endOn < :endOn", apply.option.scheme.semester.endOn)
     // 不算再次重修的，不算替代的，缓考过滤掉，只取期末总评
     query.where("not exists(from " + classOf[CourseGrade].getName +
@@ -81,11 +82,12 @@ class DefaultFirstGradeService extends FirstGradeService {
                 }
             }
         }
+
       val credits = g.course.getCredits(level)
       allGp += gaGp * credits
       allCredit += credits
       if (g.courseType.major) {
-        majorGp += credits
+        majorGp += gaGp * credits
         majorCredit += credits
       } else {
         otherGp += gaGp * credits

@@ -69,10 +69,10 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
     val project = getProject
     val query = OqlBuilder.from(classOf[Major], "m")
     query.where("m.project=:project", project)
-    query.where(s"exists(from ${classOf[StudentState].getName} ss where ss.major=m and ss.grade=:grade)", scheme.grade)
+    //query.where(s"exists(from ${classOf[StudentState].getName} ss where ss.major=m and ss.grade=:grade)", scheme.grade)
     val majors = entityDao.search(query)
     val options = Collections.newBuffer[TransferOption]
-    val now = scheme.applyBeginAt.atZone(ZoneId.systemDefault()).toLocalDate
+    val now = scheme.grade.beginOn
     majors foreach { m =>
       if (m.within(now) && !m.code.startsWith("FX")) {
         m.directions foreach { d =>

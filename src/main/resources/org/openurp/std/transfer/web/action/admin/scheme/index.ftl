@@ -3,7 +3,7 @@
 [#macro panel title]
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">${title}</h3>
+    <h4 class="panel-title">${title}</h4>
   </div>
   [#nested/]
 </div>
