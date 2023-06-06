@@ -49,6 +49,7 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
     val schemeQuery = OqlBuilder.from(classOf[TransferScheme], "scheme")
     schemeQuery.where("scheme.project=:project", std.project)
     schemeQuery.where("scheme.published=true")
+    schemeQuery.where("scheme.grade=:grade", std.grade)
     schemeQuery.where("scheme.applyEndAt>:now", Instant.now)
     val schemes = entityDao.search(schemeQuery)
     put("schemes", schemes)
