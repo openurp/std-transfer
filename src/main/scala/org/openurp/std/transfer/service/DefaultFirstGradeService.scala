@@ -67,14 +67,13 @@ class DefaultFirstGradeService extends FirstGradeService {
     var otherGp: Float = 0
     var otherCredit: Float = 0
 
+    var hasFail = false
     for (g <- leftGrades) {
-      val gaGp: Float =
-        if g.getExamGrade(new GradeType(GradeType.Makeup)).nonEmpty then 0f
-        else g.gp.getOrElse(0f)
-
+      val gaGp = if g.getExamGrade(new GradeType(GradeType.Makeup)).nonEmpty then 0f else g.gp.getOrElse(0f)
       val credits = g.course.getCredits(level)
       allGp += gaGp * credits
       allCredit += credits
+      if (!g.passed) hasFail = true
       if (g.courseType.major) {
         majorGp += gaGp * credits
         majorCredit += credits
@@ -87,7 +86,7 @@ class DefaultFirstGradeService extends FirstGradeService {
     val allGpa = if (allCredit != 0) allGp / allCredit else 0
     val majorGpa = if (majorCredit != 0) majorGp / majorCredit else 0
     val otherGpa = if (otherCredit != 0) otherGp / otherCredit else 0
-    FirstGradeStat(allGpa, majorGpa, otherGpa, majorGpa * 0.3f + otherGpa * 0.7f)
+    FirstGradeStat(allGpa, majorGpa, otherGpa, majorGpa * 0.3f + otherGpa * 0.7f, hasFail)
   }
 
   protected def removeSubstitutes(gradeCourses: collection.Set[Course], substitute: AlternativeCourse, cgs: mutable.Buffer[CourseGrade]): Unit = {

@@ -47,7 +47,7 @@
     </tr>
     <tr>
       <td class="title">平均绩点：</td>
-      <td>${transferApply.gpa?string("#.00")} </td>
+      <td>${transferApply.gpa?string("#.00")} [#if transferApply.hasFail]<sup>有不及格课程</sup>[/#if]</td>
       <td class="title">专业课绩点：</td>
       <td>${transferApply.majorGpa?string("#.00000")} </td>
       <td class="title">专业课外绩点：</td>

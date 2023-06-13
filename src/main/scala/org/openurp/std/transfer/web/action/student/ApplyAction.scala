@@ -53,11 +53,8 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
     schemeQuery.where("scheme.applyEndAt>:now", Instant.now)
     val schemes = entityDao.search(schemeQuery)
     put("schemes", schemes)
-    if (applies.isEmpty) {
-      forward("welcome")
-    } else {
-      forward()
-    }
+    if applies.isEmpty then forward("welcome")
+    else forward()
   }
 
   @mapping(value = "new", view = "new,form")
@@ -152,6 +149,7 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
     apply.majorGpa = gpaStat.majorGpa
     apply.otherGpa = gpaStat.otherGpa
     apply.transferGpa = gpaStat.transferGpa
+    apply.hasFail = gpaStat.hasFail
 
     val log = makeLog(apply)
     saveOrUpdate(List(apply, log))

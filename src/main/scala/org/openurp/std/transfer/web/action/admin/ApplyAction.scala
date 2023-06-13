@@ -27,7 +27,7 @@ import org.openurp.std.transfer.config.TransferScheme
 import org.openurp.std.transfer.log.TransferApplyLog
 import org.openurp.std.transfer.model.TransferApply
 import org.openurp.std.transfer.service.FirstGradeService
-import org.openurp.std.transfer.web.helper.{ApplyPropertyExtractor, ApplyDocHelper}
+import org.openurp.std.transfer.web.helper.{ApplyDocHelper, ApplyPropertyExtractor}
 
 class ApplyAction extends RestfulAction[TransferApply], ExportSupport[TransferApply], ProjectSupport {
   var firstGradeService: FirstGradeService = _
@@ -82,6 +82,7 @@ class ApplyAction extends RestfulAction[TransferApply], ExportSupport[TransferAp
       apply.majorGpa = gpaStat.majorGpa
       apply.otherGpa = gpaStat.otherGpa
       apply.transferGpa = gpaStat.transferGpa
+      apply.hasFail = gpaStat.hasFail
     }
     entityDao.saveOrUpdate(applies)
     redirect("search", "info.save.success")

@@ -4,7 +4,7 @@
   [@b.form name="transferSchemeEditForm" action=b.rest.save(transferScheme) theme="list"]
     [@b.field label="学年学期"]${transferScheme.semester.schoolYear}学年度${transferScheme.semester.name}学期[/@]
     [@b.textfield label="名称" name="transferScheme.name" value=transferScheme.name maxlength="100"/]
-    [@b.select name="transferScheme.grade.id" label="转入年级" items=grades?sort_by('code')?reverse required="true" /]
+    [@b.select name="transferScheme.grade.id" label="转入年级" items=grades?sort_by('code')?reverse value=transferScheme.grade required="true" /]
     [@b.startend label="院系制定计划" name="transferScheme.editBeginAt,transferScheme.editEndAt" format="yyyy-MM-dd HH:mm:ss" start=transferScheme.editBeginAt! end=transferScheme.editEndAt! required="true"/]
     [@b.startend label="学生提交申请" name="transferScheme.applyBeginAt,transferScheme.applyEndAt" format="yyyy-MM-dd HH:mm:ss" start=transferScheme.applyBeginAt! end=transferScheme.applyEndAt! required="true"/]
     [@b.startend label="院系面试审核" name="transferScheme.auditBeginAt,transferScheme.auditEndAt" format="yyyy-MM-dd HH:mm:ss" start=transferScheme.auditBeginAt! end=transferScheme.auditEndAt! required="true"/]

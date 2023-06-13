@@ -18,7 +18,7 @@
     </div>
     <ul class="nav navbar-nav navbar-right">
     [#list schemes as scheme]
-       [#if scheme.canApply()]
+       [#if scheme.canApply]
         <li>
         [@b.form class="navbar-form navbar-left" role="search" action="!editNew"]
             [@b.a class="btn btn-sm btn-info" href="!editNew?scheme.id="+scheme.id]<i class="fas fa-plus"></i>申请[/@]
@@ -36,12 +36,12 @@
   [#assign title]
      <i class="fas fa-bookmark"></i>${apply.option.scheme.name}<span style="font-size:0.8em">(${scheme.applyBeginAt?string("yyyy-MM-dd HH:mm")}~${scheme.applyEndAt?string("yyyy-MM-dd HH:mm")})</span>
        <div class="btn-group">
-     [#if scheme.canApply()]
+     [#if scheme.canApply]
        [@b.a href="!edit?id="+apply.id+"&scheme.id="+scheme.id class="btn btn-sm btn-info"]<i class="fas fa-edit"></i>修改[/@]
      [/#if]
        [@b.a href="!download?id="+apply.id class="btn btn-sm btn-info" target="_blank"]<i class="fas fa-download"></i>下载[/@]
        </div>
-     [#if scheme.canApply()]
+     [#if scheme.canApply]
        [#if apply.status!="通过"]
        <a href="#" onclick="return removeApply('${apply.id}');" class="btn btn-sm btn-warning"><i class="fas fa-times"></i>删除</a>
        [/#if]

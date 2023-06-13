@@ -17,4 +17,4 @@
 
 package org.openurp.std.transfer.service
 
-case class FirstGradeStat(gpa:Float,majorGpa:Float,otherGpa:Float,transferGpa:Float)
+case class FirstGradeStat(gpa: Float, majorGpa: Float, otherGpa: Float, transferGpa: Float, hasFail: Boolean)

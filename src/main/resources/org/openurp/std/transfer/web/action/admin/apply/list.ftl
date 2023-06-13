@@ -11,8 +11,8 @@
                         "std.code:学号,std.name:姓名,std.gender.name:性别,fromGrade.code:转出年级,fromDepart.name:转出院系,"+
                         "fromMajor.name:转出专业,fromDirection.name:转出方向,fromSquad.name:转出班级,toGrade.code:转入年级,"+
                         "toDepart.name:转入院系,toMajor.name:转入专业,toDirection.name:转入方向,toSquad.name:转入班级,"+
-                        "gpa:总绩点,majorGpa:专业课成绩绩点,otherGpa:专业课外成绩绩点,transferGpa:转专业绩点,"+
-                        "mobile:联系电话,adjustable:是否服从调剂,state:状态");
+                        "gpa:总绩点,majorGpa:专业课成绩绩点,otherGpa:专业课外成绩绩点,transferGpa:转专业绩点,hasFail:有不及格课程,"+
+                        "mobile:联系电话,adjustable:是否服从调剂,status:状态");
         bg.form.addInput(form, "fileName", "学生转专业申请名单");
         bg.form.submit(form, "${b.url('!exportData')}","_self");
       }
