@@ -17,7 +17,7 @@
 
 package org.openurp.std.transfer.web.helper
 
-import org.beangle.data.transfer.exporter.DefaultPropertyExtractor
+import org.beangle.commons.bean.DefaultPropertyExtractor
 import org.openurp.std.transfer.model.TransferApply
 
 import java.text.NumberFormat
@@ -29,14 +29,14 @@ class ApplyPropertyExtractor extends DefaultPropertyExtractor {
   gpaFormater.setMinimumFractionDigits(2)
   majorGpaFormater.setMinimumFractionDigits(5)
 
-  override def getPropertyValue(target: Object, property: String): Any = {
+  override def get(target: Object, property: String): Any = {
     property match {
       case "gpa" => gpaFormater.format(target.asInstanceOf[TransferApply].gpa)
       case "majorGpa" =>
         majorGpaFormater.format(target.asInstanceOf[TransferApply].majorGpa)
       case "otherGpa" => majorGpaFormater.format(target.asInstanceOf[TransferApply].otherGpa)
       case "transferGpa" => majorGpaFormater.format(target.asInstanceOf[TransferApply].transferGpa)
-      case _ => super.getPropertyValue(target, property)
+      case _ => super.get(target, property)
     }
   }
 }

@@ -18,7 +18,7 @@
 package org.openurp.std.transfer.web.action.admin
 
 import org.beangle.data.dao.OqlBuilder
-import org.beangle.data.transfer.exporter.ExportContext
+import org.beangle.doc.transfer.exporter.ExportContext
 import org.beangle.web.action.annotation.{mapping, param}
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.{ExportSupport, RestfulAction}
