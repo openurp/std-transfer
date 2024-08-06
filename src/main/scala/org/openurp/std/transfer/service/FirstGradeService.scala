@@ -17,9 +17,13 @@
 
 package org.openurp.std.transfer.service
 
+import org.openurp.base.model.Semester
+import org.openurp.base.std.model.Student
 import org.openurp.std.transfer.model.TransferApply
 
 trait FirstGradeService {
 
   def stat(apply: TransferApply): FirstGradeStat
+
+  def stat(std: Student, endSemester: Semester): FirstGradeStat
 }

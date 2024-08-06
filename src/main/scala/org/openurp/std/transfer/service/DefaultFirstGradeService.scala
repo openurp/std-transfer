@@ -19,6 +19,8 @@ package org.openurp.std.transfer.service
 
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.openurp.base.edu.model.Course
+import org.openurp.base.model.Semester
+import org.openurp.base.std.model.Student
 import org.openurp.code.edu.model.GradeType
 import org.openurp.edu.grade.model.{CourseGrade, Grade}
 import org.openurp.edu.program.domain.AlternativeCourseProvider
@@ -32,14 +34,17 @@ class DefaultFirstGradeService extends FirstGradeService {
   var entityDao: EntityDao = _
   var alternativeCourseProvider: AlternativeCourseProvider = _
 
-  def stat(apply: TransferApply): FirstGradeStat = {
-    val std = apply.std
+  override def stat(apply: TransferApply): FirstGradeStat = {
+    stat(apply.std, apply.option.scheme.semester)
+  }
+
+  override def stat(std: Student, endSemester: Semester): FirstGradeStat = {
     val level = std.level
     val query = OqlBuilder.from(classOf[CourseGrade], "cg")
     query.where("cg.std=:std", std)
     query.where("cg.status=:status", Grade.Status.Published)
     //cannot be <=
-    query.where("cg.semester.endOn < :endOn", apply.option.scheme.semester.endOn)
+    query.where("cg.semester.endOn < :endOn", endSemester.endOn)
     // 不算再次重修的，不算替代的，缓考过滤掉，只取期末总评
     query.where("not exists(from " + classOf[CourseGrade].getName +
       " cg2 where cg2.std=cg.std and cg2.status=" + Grade.Status.Published +
@@ -74,7 +79,7 @@ class DefaultFirstGradeService extends FirstGradeService {
       allGp += gaGp * credits
       allCredit += credits
       if (!g.passed) hasFail = true
-      if (g.courseType.major) {
+      if (g.courseType.module.exists(_.major)) {
         majorGp += gaGp * credits
         majorCredit += credits
       } else {

@@ -90,6 +90,8 @@ class ApplyAction extends RestfulAction[TransferApply] with ProjectSupport {
         apply.email = u.email.orNull
       }
     }
+    val gpaStat = firstGradeService.stat(std, scheme.semester)
+    put("gpaStat", gpaStat)
     put("std", std)
     put("scheme", scheme)
     val options = scheme.options.sortBy(x => x.depart.code + x.major.code)

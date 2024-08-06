@@ -63,13 +63,13 @@
     </tr>
   </table>
 
-  [@b.grid items=logs?sort_by("operateAt")?reverse var="log" sortable="false"]
+  [@b.grid items=logs?sort_by("id")?reverse var="log" sortable="false"]
       [@b.row]
         [@b.col title="操作" property="operation" width="13%"/]
         [@b.col title="专业" property="contents" width="50%"/]
         [@b.col title="IP" property="ip"  width="10%"/]
         [@b.col title="时间" width="15%" property="logAt"]
-          ${log.operateAt?string("yyyy-MM-dd HH:mm:ss")}
+          ${(log.operateAt?string("yyyy-MM-dd HH:mm:ss"))!}
         [/@]
       [/@]
     [/@]

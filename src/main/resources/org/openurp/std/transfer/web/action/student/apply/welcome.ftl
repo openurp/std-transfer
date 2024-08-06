@@ -10,7 +10,7 @@
     </div>
     <ul class="nav navbar-nav navbar-right">
     [#list schemes  as scheme]
-       [#if scheme.canApply()]
+       [#if scheme.canApply]
         <li>
         [@b.form class="navbar-form navbar-left" role="search" action="!editNew"]
             [@b.a class="btn btn-sm btn-info" href="!editNew?scheme.id="+scheme.id]<i class="fa-solid fa-plus"></i>申请[/@]
@@ -29,7 +29,7 @@
         [#list schemes  as scheme]
         <p>欢迎进入转专业申请和结果查询，现在就申请。</p>
         <p>
-         [#if scheme.canApply()]
+         [#if scheme.canApply]
          [@b.a class="btn btn-lg btn-info" role="button" href="!editNew?scheme.id="+scheme.id]<i class="fa-solid fa-plus"></i>申请<small>(${scheme.applyBeginAt?string("yyyy-MM-dd HH:mm")}~${scheme.applyEndAt?string("yyyy-MM-dd HH:mm")})</small>[/@]
          [#else]
          <a class="btn btn-lg btn-info" role="button" diabled="disabled">申请时间：${scheme.applyBeginAt?string("yyyy-MM-dd HH:mm")}~${scheme.applyEndAt?string("yyyy-MM-dd HH:mm")})</a>

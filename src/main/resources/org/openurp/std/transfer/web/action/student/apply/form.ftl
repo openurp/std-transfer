@@ -6,6 +6,7 @@
     [@b.field label="学号姓名"]${std.code} ${std.name}[/@]
     [@b.field label="现专业"]${std.state.major.name} ${(std.state.direction.name)!}[/@]
     [@b.field label="转入年级"]${transferApply.toGrade.code}级[/@]
+    [@b.field label="绩点"]总平均绩点:${gpaStat.gpa?string("#.00000")} （专业课成绩绩点:${gpaStat.majorGpa?string("#.00000")}&nbsp; &nbsp;专业课外绩点:${gpaStat.otherGpa?string("#.00000")}&nbsp;&nbsp;转专业绩点${gpaStat.transferGpa?string("#.00000")})[/@]
     [@b.select label="申请转入" id="applyOption" name="transferApply.option.id" style="width:400px" items=options option=r"${item.depart.name} ${item.major.name} ${(item.direction.name)!}" value=transferApply.option required="true" empty="..."/]
     [@b.radios label="是否服从调剂" name="transferApply.adjustable" value=transferApply.adjustable /]
     [@b.textfield label="联系电话" name="transferApply.mobile" value=transferApply.mobile maxlength="11" required="true"/]
