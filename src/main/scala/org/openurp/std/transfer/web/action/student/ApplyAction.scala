@@ -20,8 +20,8 @@ package org.openurp.std.transfer.web.action.student
 import org.beangle.commons.collection.Collections
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.security.Securities
-import org.beangle.web.action.annotation.{ignore, mapping, param}
-import org.beangle.web.action.view.{Status, View}
+import org.beangle.webmvc.annotation.{ignore, mapping, param}
+import org.beangle.webmvc.view.{Status, View}
 import org.beangle.web.servlet.util.RequestUtils
 import org.beangle.webmvc.support.action.RestfulAction
 import org.openurp.base.model.{AuditStatus, Project, User}

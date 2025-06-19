@@ -20,8 +20,8 @@ package org.openurp.std.transfer.web.action.admin
 import org.beangle.commons.collection.Collections
 import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.OqlBuilder
-import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.RestfulAction
+import org.beangle.webmvc.view.View
 import org.openurp.base.edu.model.{Direction, Major}
 import org.openurp.base.model.{Department, Project}
 import org.openurp.base.std.model.{Grade, StudentState}
@@ -72,7 +72,7 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
     //query.where(s"exists(from ${classOf[StudentState].getName} ss where ss.major=m and ss.grade=:grade)", scheme.grade)
     val majors = entityDao.search(query)
     val options = Collections.newBuffer[TransferOption]
-    val now = scheme.grade.beginOn
+    val now = scheme.grade.beginIn.atDay(1)
     majors foreach { m =>
       if (m.within(now) && !m.code.startsWith("FX")) {
         m.directions foreach { d =>
@@ -81,7 +81,7 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
             d.journals foreach { dj => if dj.within(now) then departs += dj.depart }
           }
           departs foreach { depart =>
-            val existed = scheme.options.exists(x => x.depart == depart && x.major == m && x.direction == Some(d))
+            val existed = scheme.options.exists(x => x.depart == depart && x.major == m && x.direction.contains(d))
             if (!existed) {
               val option = new TransferOption
               option.depart = depart
