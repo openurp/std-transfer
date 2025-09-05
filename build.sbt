@@ -2,7 +2,7 @@ import org.openurp.parent.Dependencies._
 import org.openurp.parent.Settings._
 
 ThisBuild / organization := "org.openurp.std.transfer"
-ThisBuild / version := "0.0.3-SNAPSHOT"
+ThisBuild / version := "0.0.3"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -23,9 +23,9 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Std Transfer"
 ThisBuild / homepage := Some(url("http://openurp.github.io/std-transfer/index.html"))
 
-val apiVer = "0.44.0"
-val starterVer = "0.3.58"
-val baseVer = "0.4.51"
+val apiVer = "0.46.0"
+val starterVer = "0.4.0"
+val baseVer = "0.4.55"
 
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVer
 val openurp_std_api = "org.openurp.std" % "openurp-std-api" % apiVer
@@ -38,6 +38,6 @@ lazy val root = (project in file("."))
   .settings(
     name := "openurp-std-transfer-webapp",
     common,
-    libraryDependencies ++= Seq(openurp_base_api, openurp_edu_api, openurp_std_api, beangle_ems_app),
+    libraryDependencies ++= Seq(openurp_base_api, openurp_edu_api, openurp_std_api),
     libraryDependencies ++= Seq(openurp_stater_web, openurp_base_tag, beangle_doc_docx)
   )

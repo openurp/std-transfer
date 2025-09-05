@@ -17,13 +17,9 @@
 
 package org.openurp.std.transfer.web.helper
 
-import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.beangle.commons.collection.Collections
-import org.beangle.doc.docx.DocHelper
+import org.beangle.doc.docx.DocTemplate
 import org.openurp.std.transfer.model.TransferApply
-
-import java.io.ByteArrayOutputStream
-import java.net.URL
 
 object ApplyDocHelper {
 
@@ -60,7 +56,7 @@ object ApplyDocHelper {
     data.put("transferGpa", nf.format(apply.transferGpa))
 
     val url = this.getClass.getResource("/org/openurp/std/transfer/application.docx")
-    DocHelper.toDoc(url, data)
+    DocTemplate.process(url, data)
   }
 
 }
