@@ -22,7 +22,7 @@ import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.OqlBuilder
 import org.beangle.webmvc.support.action.RestfulAction
 import org.beangle.webmvc.view.View
-import org.openurp.base.edu.model.{Direction, Major}
+import org.openurp.base.edu.model.{MajorDirection, Major}
 import org.openurp.base.model.{Department, Project}
 import org.openurp.base.std.model.{Grade, StudentState}
 import org.openurp.starter.web.support.ProjectSupport
@@ -143,9 +143,9 @@ class SchemeAction extends RestfulAction[TransferScheme] with ProjectSupport {
               val ids = Strings.split(name, "_")
               val depart = entityDao.get(classOf[Department], ids(0).toInt)
               val major = entityDao.get(classOf[Major], ids(1).toLong)
-              var direction: Option[Direction] = None
+              var direction: Option[MajorDirection] = None
               if (ids(2) != "null") {
-                direction = Some(entityDao.get(classOf[Direction], ids(2).toLong))
+                direction = Some(entityDao.get(classOf[MajorDirection], ids(2).toLong))
               }
               val option = new TransferOption
               option.scheme = scheme
